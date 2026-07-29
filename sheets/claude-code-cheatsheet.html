@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Code — Cheatsheet</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#E7E9E1;   --card:#FBFBF7;   --ink:#171B17;    --ink-2:#5C6359;
+  --rule:#CBCFC1;    --volt:#4B31C8;   --volt-soft:#EAE6FA;
+  --amber:#A8660F;   --amber-soft:#F6EBD9;
+  --moss:#2C6740;    --moss-soft:#E1EDE2;
+  --crimson:#A72B29;
+  --code-bg:#141914; --code-fg:#DFE5D8; --code-key:#9FC4F0;
+  --code-str:#C7DFA0; --code-com:#7C8878;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} *{transition:none !important; animation:none !important;} }
+
+body{
+  margin:0; color:var(--ink); font-family:'Archivo',sans-serif;
+  background-color:var(--paper);
+  background-image:
+    linear-gradient(var(--rule) 1px, transparent 1px),
+    linear-gradient(90deg, var(--rule) 1px, transparent 1px);
+  background-size:56px 56px;
+  background-position:-1px -1px;
+}
+
+a{color:inherit;}
+.mono{font-family:'JetBrains Mono',monospace;}
+
+/* ---------- Masthead ---------- */
+.masthead{max-width:1180px;margin:0 auto;padding:40px 32px 24px;}
+.back-link{
+  font-family:'JetBrains Mono',monospace; font-size:13px; text-decoration:none;
+  color:var(--ink-2); display:inline-block; margin-bottom:28px; border-bottom:1px solid var(--rule);
+  padding-bottom:2px;
+}
+.back-link:hover{color:var(--volt); border-color:var(--volt);}
+.eyebrow{
+  font-family:'JetBrains Mono',monospace; font-size:13px; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--ink-2); margin:0 0 8px;
+}
+h1.title{
+  font-weight:800; text-transform:uppercase; letter-spacing:-.035em;
+  font-size:clamp(38px,8vw,92px); line-height:.95; margin:0 0 18px;
+}
+h1.title em{color:var(--volt); font-style:normal;}
+.subtitle{font-size:18px; color:var(--ink-2); max-width:60ch; margin:0;}
+
+/* ---------- Hero ---------- */
+.hero{
+  max-width:1180px; margin:0 auto; padding:8px 32px 40px;
+  display:grid; grid-template-columns:1.3fr 1fr; gap:28px; align-items:start;
+}
+.hero pre{margin:0;}
+.hero-aside{
+  background:var(--card); border:1px solid var(--rule); padding:20px 22px;
+}
+.hero-aside h4{
+  margin:0 0 14px; text-transform:uppercase; font-size:13px; letter-spacing:.08em;
+  font-family:'JetBrains Mono',monospace; color:var(--ink-2);
+}
+.hero-aside ol{margin:0; padding-left:20px;}
+.hero-aside li{margin-bottom:10px; font-size:14.5px; line-height:1.45;}
+.hero-aside li b{font-family:'JetBrains Mono',monospace; color:var(--volt);}
+
+/* ---------- Filter bar ---------- */
+.filterbar{
+  position:sticky; top:0; z-index:50; background:var(--paper);
+  border-bottom:2px solid var(--ink); padding:14px 32px;
+  display:flex; align-items:center; gap:16px; max-width:1180px; margin:0 auto;
+  backdrop-filter:blur(2px);
+}
+.filterbar input{
+  flex:1; font-family:'JetBrains Mono',monospace; font-size:15px; padding:10px 14px;
+  border:1px solid var(--rule); background:var(--card); color:var(--ink);
+}
+.filterbar input:focus-visible{outline:2px solid var(--volt); outline-offset:1px;}
+.filter-count{font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--ink-2); white-space:nowrap;}
+
+/* ---------- Body layout ---------- */
+.body-grid{
+  max-width:1180px; margin:0 auto; padding:36px 32px 60px;
+  display:grid; grid-template-columns:200px 1fr; gap:40px; align-items:start;
+}
+.rail{position:sticky; top:76px; align-self:start;}
+.rail-line{position:relative; padding-left:18px; border-left:1px solid var(--rule);}
+.rail a{
+  display:block; font-family:'JetBrains Mono',monospace; font-size:12.5px;
+  color:var(--ink-2); text-decoration:none; padding:6px 0; position:relative;
+}
+.rail a::before{
+  content:""; position:absolute; left:-22px; top:12px; width:7px; height:7px;
+  border-radius:50%; background:var(--rule); border:1px solid var(--rule);
+}
+.rail a:hover{color:var(--volt);}
+.rail a:hover::before{background:var(--volt); border-color:var(--volt);}
+
+main{min-width:0;}
+section.group{margin-bottom:52px; scroll-margin-top:80px;}
+section.group.is-empty{display:none;}
+.section-head{
+  display:flex; justify-content:space-between; align-items:baseline;
+  border-bottom:2px solid var(--ink); padding-bottom:8px; margin-bottom:22px; gap:16px; flex-wrap:wrap;
+}
+.section-head h2{
+  text-transform:uppercase; font-size:22px; letter-spacing:.01em; margin:0; font-weight:800;
+}
+.section-sub{font-family:'JetBrains Mono',monospace; font-size:12.5px; color:var(--ink-2); white-space:nowrap;}
+
+.cards{
+  display:grid; grid-template-columns:repeat(auto-fill, minmax(330px,1fr));
+  gap:18px; align-items:start;
+}
+.card{
+  background:var(--card); border:1px solid var(--rule); padding:18px 20px;
+  break-inside:avoid;
+}
+.card.hidden{display:none;}
+.card.wide{grid-column:span 2;}
+.card h3{
+  font-size:14.5px; text-transform:uppercase; letter-spacing:.03em; margin:0 0 8px;
+  padding-left:14px; position:relative; font-weight:700;
+}
+.card h3::before{
+  content:""; position:absolute; left:0; top:4px; width:8px; height:8px; background:var(--volt);
+}
+.card p{margin:0 0 10px; font-size:14.5px; line-height:1.5; color:var(--ink-2);}
+.card p:last-child{margin-bottom:0;}
+
+pre{
+  background:var(--code-bg); color:var(--code-fg); font-family:'JetBrains Mono',monospace;
+  font-size:13px; line-height:1.55; padding:14px 16px; overflow-x:auto; margin:0 0 10px;
+  border-radius:2px;
+}
+pre b{color:var(--code-key); font-weight:500;}
+pre i{color:var(--code-str); font-style:normal;}
+pre s{color:var(--code-com); text-decoration:none;}
+code{
+  font-family:'JetBrains Mono',monospace; background:var(--volt-soft); color:var(--volt);
+  padding:1px 6px; font-size:13.5px; white-space:nowrap;
+}
+p code, li code{white-space:normal;}
+
+.note{border-left:3px solid var(--rule); padding:10px 14px; font-size:13.5px; line-height:1.5; margin-top:10px; background:transparent;}
+.note b{display:block; font-family:'JetBrains Mono',monospace; text-transform:uppercase; font-size:11.5px; letter-spacing:.06em; margin-bottom:4px;}
+.note.tip{border-color:var(--moss); background:var(--moss-soft);}
+.note.tip b{color:var(--moss);}
+.note.gotcha{border-color:var(--amber); background:var(--amber-soft);}
+.note.gotcha b{color:var(--amber);}
+.note.danger{border-color:var(--crimson); background:#FBEBEA;}
+.note.danger b{color:var(--crimson);}
+
+table{width:100%; border-collapse:collapse; margin:6px 0 10px; font-size:13.5px;}
+th{text-align:left; font-family:'JetBrains Mono',monospace; font-size:11.5px; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-2); border-bottom:1px solid var(--ink); padding:6px 8px;}
+td{padding:7px 8px; border-bottom:1px solid var(--rule); vertical-align:top;}
+tr:last-child td{border-bottom:none;}
+td:first-child{font-family:'JetBrains Mono',monospace; white-space:nowrap; width:1%; color:var(--ink);}
+
+.no-match{display:none; padding:40px 0; text-align:center; color:var(--ink-2); font-family:'JetBrains Mono',monospace;}
+.no-match.show{display:block;}
+
+.chip-rail{display:none;}
+
+footer{max-width:1180px; margin:0 auto; padding:24px 32px 60px; border-top:2px solid var(--ink);}
+footer p{font-family:'JetBrains Mono',monospace; font-size:12.5px; color:var(--ink-2); margin:6px 0 0;}
+
+:focus-visible{outline:2px solid var(--volt); outline-offset:2px;}
+
+/* ---------- Responsive ---------- */
+@media (max-width:1000px){
+  .hero{grid-template-columns:1fr;}
+  .body-grid{grid-template-columns:1fr;}
+  .rail{display:none;}
+  .chip-rail{
+    display:flex; gap:8px; overflow-x:auto; padding:14px 32px; max-width:1180px; margin:0 auto;
+    border-bottom:1px solid var(--rule);
+  }
+  .chip-rail a{
+    font-family:'JetBrains Mono',monospace; font-size:12px; white-space:nowrap; text-decoration:none;
+    color:var(--ink-2); border:1px solid var(--rule); padding:6px 12px; border-radius:20px; background:var(--card);
+  }
+}
+@media (max-width:600px){
+  .card.wide{grid-column:span 1;}
+  .masthead, .hero, .body-grid, footer{padding-left:18px; padding-right:18px;}
+  .filterbar{padding:12px 18px;}
+}
+
+/* ---------- Print ---------- */
+@media print{
+  body{background:#fff; background-image:none;}
+  .filterbar, .rail, .hero-aside, .chip-rail, .back-link{display:none !important;}
+  .hero{grid-template-columns:1fr;}
+  .body-grid{grid-template-columns:1fr; padding:0 12px;}
+  .cards{grid-template-columns:repeat(2,1fr);}
+  .card, pre{break-inside:avoid;}
+  pre{background:#fff; color:#111; border:1px solid #999;}
+  pre b{color:#0a4b8f;}
+  pre i{color:#2f6b1f;}
+  pre s{color:#777;}
+  section.group.is-empty{display:none;}
+  a{text-decoration:none;}
+}
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <a class="back-link" href="../index.html">&larr; All cheatsheets</a>
+  <p class="eyebrow">// CLI agent / dev workflow</p>
+  <h1 class="title">Claude <em>Code</em></h1>
+  <p class="subtitle">The exact syntax for CLAUDE.md, permissions, subagents, skills, hooks, MCP and sandboxing — plus what silently breaks in each.</p>
+</div>
+
+<div class="hero">
+  <pre><s>&larr; 1</s> <b>~/.claude/settings.json</b>  (user scope, applies to all projects)
+<s>&larr; 2</s> {
+  <b>"model"</b>: <i>"claude-opus-4-8"</i>,
+<s>&larr; 3</s>  <b>"permissions"</b>: {
+    <b>"allow"</b>: [<i>"Bash(git *)"</i>, <i>"Edit"</i>],
+    <b>"deny"</b>:  [<i>"Bash(rm -rf *)"</i>, <i>"WebFetch"</i>]
+  },
+<s>&larr; 4</s>  <b>"hooks"</b>: {
+    <b>"PostToolUse"</b>: [{
+      <b>"matcher"</b>: <i>"Edit|Write"</i>,
+      <b>"hooks"</b>: [{ <b>"type"</b>: <i>"command"</i>, <b>"command"</b>: <i>"npx prettier --write ."</i> }]
+    }]
+  },
+<s>&larr; 5</s>  <b>"env"</b>: { <b>"CLAUDE_CODE_MAX_OUTPUT_TOKENS"</b>: <i>"8192"</i> }
+}</pre>
+  <div class="hero-aside">
+    <h4>What each part does</h4>
+    <ol>
+      <li><b>1.</b> Config resolves in layers: enterprise policy → <code>~/.claude/settings.json</code> (user) → <code>.claude/settings.json</code> (project, committed) → <code>.claude/settings.local.json</code> (project, gitignored). Later layers override earlier ones.</li>
+      <li><b>2.</b> <code>model</code> pins the default model for every session started here — overridable per-run with <code>--model</code> or mid-session with <code>/model</code>.</li>
+      <li><b>3.</b> <code>permissions.allow/deny</code> are glob-style rules checked before every tool call. This is the actual access-control layer — not the interactive y/n prompts, which are just the fallback for anything unmatched.</li>
+      <li><b>4.</b> <code>hooks</code> run shell commands at lifecycle events. This one reformats every file Claude edits or writes, automatically, with no prompt.</li>
+      <li><b>5.</b> Plain env vars Claude Code itself reads (context budget, telemetry, proxy settings) — separate from your project's own <code>.env</code>.</li>
+    </ol>
+  </div>
+</div>
+
+<div class="filterbar">
+  <label for="filter-input" style="position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0);">Filter cheatsheet cards</label>
+  <input id="filter-input" type="text" placeholder="Filter — try &quot;hook&quot;, &quot;permission&quot;, &quot;subagent&quot;… ( / to focus, Esc to clear )" autocomplete="off">
+  <span class="filter-count mono" id="filter-count">— of — cards</span>
+</div>
+
+<div class="chip-rail" id="chip-rail"></div>
+
+<div class="body-grid">
+  <nav class="rail" aria-label="Section navigation">
+    <div class="rail-line" id="rail-line"></div>
+  </nav>
+
+  <main>
+
+  <section class="group" id="setup" data-title="Install &amp; First Run">
+    <div class="section-head"><h2>Install &amp; First Run</h2><span class="section-sub mono">01 / getting on the machine</span></div>
+    <div class="cards">
+
+      <div class="card">
+        <h3>Install (npm)</h3>
+        <p>Global install, needs Node 18+.</p>
+        <pre><b>npm</b> install -g <i>@anthropic-ai/claude-code</i></pre>
+      </div>
+
+      <div class="card">
+        <h3>Install (native, no Node)</h3>
+        <p>Standalone binary — skips the Node/npm dependency chain entirely.</p>
+        <pre><b>curl</b> -fsSL https://claude.ai/install.sh <s>| bash</s></pre>
+        <div class="note tip"><b>Tip</b>Prefer this on CI runners and fresh VPS boxes — one less thing (Node version drift) to debug at 2am.</div>
+      </div>
+
+      <div class="card">
+        <h3>Launch &amp; Auth</h3>
+        <p>Run inside the project directory you want it working on.</p>
+        <pre><b>cd</b> my-project <s>&&</s> <b>claude</b></pre>
+        <p>First run opens a browser to authenticate against your Claude.ai or Console account.</p>
+      </div>
+
+      <div class="card">
+        <h3>Update</h3>
+        <p>Claude Code updates itself; force it explicitly when a fix is announced.</p>
+        <pre><b>claude</b> update</pre>
+      </div>
+
+      <div class="card">
+        <h3>Version &amp; Doctor</h3>
+        <p>Sanity-check the install before filing a bug.</p>
+        <pre><b>claude</b> --version
+<b>claude</b> doctor</pre>
+      </div>
+
+      <div class="card">
+        <h3>.gitignore essentials</h3>
+        <p>Local overrides and session state should never hit the repo.</p>
+        <pre><i>.claude/settings.local.json</i>
+<i>.claude/shell-snapshots/</i>
+<i>.mcp.local.json</i></pre>
+        <div class="note gotcha"><b>Gotcha</b><code>.claude/settings.json</code> (no <code>.local</code>) is meant to be committed and shared with the team — don't gitignore that one by mistake, it's your project's shared permission and hook config.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="group" id="basics" data-title="CLI Basics &amp; Modes">
+    <div class="section-head"><h2>CLI Basics &amp; Modes</h2><span class="section-sub mono">02 / how you actually invoke it</span></div>
+    <div class="cards">
+
+      <div class="card">
+        <h3>Interactive mode</h3>
+        <p>Default — a REPL you type into, holds context across turns.</p>
+        <pre><b>claude</b></pre>
+      </div>
+
+      <div class="card">
+        <h3>Print mode (one-shot)</h3>
+        <p>Non-interactive — runs a single prompt to completion and exits. What you use in scripts.</p>
+        <pre><b>claude</b> -p <i>"summarize the diff on this branch"</i></pre>
+      </div>
+
+      <div class="card">
+        <h3>Pipe input in</h3>
+        <p>Stdin becomes part of the prompt context — logs, diffs, test output.</p>
+        <pre><b>git</b> diff <s>|</s> <b>claude</b> -p <i>"review this diff for bugs"</i></pre>
+      </div>
+
+      <div class="card">
+        <h3>Continue / resume a session</h3>
+        <p><code>--continue</code> picks up the most recent conversation in this directory; <code>--resume</code> lets you pick which one.</p>
+        <pre><b>claude</b> --continue
+<b>claude</b> --resume</pre>
+        <div class="note gotcha"><b>Gotcha</b><code>--continue</code> is scoped to the current working directory. Run it from a different folder and it silently starts nothing — it won't cross-load a session from elsewhere.</div>
+      </div>
+
+      <div class="card">
+        <h3>Pick a model for this run</h3>
+        <p>Overrides <code>settings.json</code> for a single invocation only.</p>
+        <pre><b>claude</b> --model <i>claude-opus-4-8</i></pre>
+      </div>
+
+      <div class="card wide">
+        <h3>Flags worth memorizing</h3>
+        <table>
+          <tr><th>Flag</th><th>Does</th></tr>
+          <tr><td>-p, --print</td><td>Run once, non-interactively, then exit</td></tr>
+          <tr><td>--continue</td><td>Resume the last session in this cwd</td></tr>
+          <tr><td>--resume</td><td>Pick a past session from a list</td></tr>
+          <tr><td>--model</td><td>Override the model for this run</td></tr>
+          <tr><td>--allowedTools</td><td>Whitelist tools for this run only</td></tr>
+          <tr><td>--permission-mode</td><td>plan / acceptEdits / bypassPermissions</td></tr>
+          <tr><td>--output-format json</td><td>Machine-readable output for scripting</td></tr>
+          <tr><td>--dangerously-skip-permissions</td><td>No prompts, no allow/deny checks at all</td></tr>
+        </table>
+      </div>
+
+      <div class="card">
+        <h3>Terminal integration quirks</h3>
+        <p>Behavior differs slightly by terminal emulator.</p>
+        <div class="note gotcha"><b>Gotcha</b>In some terminals (older Windows Terminal builds, tmux without proper passthrough) box-drawing and the live diff view render as garbled characters — switch to a modern terminal (iTerm2, Ghostty, VS Code's integrated terminal) rather than debugging your prompt.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="group" id="sessions" data-title="Sessions &amp; Context">
+    <div class="section-head"><h2>Sessions &amp; Context</h2><span class="section-sub mono">03 / managing the window</span></div>
+    <div class="cards">
+
+      <div class="card">
+        <h3>/clear — wipe context</h3>
+        <p>Starts a brand-new context; nothing from before persists.</p>
+        <pre><s>&gt;</s> <b>/clear</b></pre>
+      </div>
+
+      <div class="card">
+        <h3>/compact — summarize &amp; continue</h3>
+        <p>Replaces history with a summary but keeps the thread going — use this, not <code>/clear</code>, when you still need the thread of a long task.</p>
+        <pre><s>&gt;</s> <b>/compact</b>
+<s>&gt;</s> <b>/compact</b> <i>"keep the auth bug details, drop the CSS discussion"</i></pre>
+      </div>
+
+      <div class="card">
+        <h3>Auto-compact</h3>
+        <p>Claude Code compacts automatically as you approach the context limit.</p>
+        <div class="note gotcha"><b>Gotcha</b>Auto-compact runs on a token buffer, not a hard wall — it can trigger mid-task on a big file read. If a compaction happens right before a critical edit, re-state the constraint explicitly afterward; summaries lose specificity, not just word count.</div>
+      </div>
+
+      <div class="card">
+        <h3>/context — inspect usage</h3>
+        <p>Shows a breakdown of what's actually consuming your context window.</p>
+        <pre><s>&gt;</s> <b>/context</b></pre>
+      </div>
+
+      <div class="card">
+        <h3>/cost — check token spend</h3>
+        <p>Running total for the current session.</p>
+        <pre><s>&gt;</s> <b>/cost</b></pre>
+      </div>
+
+      <div class="card wide">
+        <h3>When to actually start a new session</h3>
+        <p>Not every task warrants <code>/clear</code> — but some symptoms mean you should stop patching and restart.</p>
+        <table>
+          <tr><th>Symptom</th><th>Action</th></tr>
+          <tr><td>Task genuinely finished</td><td>/clear, start fresh</td></tr>
+          <tr><td>Switching to an unrelated file/feature</td><td>/clear</td></tr>
+          <tr><td>Same task, conversation just long</td><td>/compact</td></tr>
+          <tr><td>Claude re-suggesting something already rejected</td><td>/clear — stale context is steering it wrong</td></tr>
+          <tr><td>Repeated wrong edits to the same file</td><td>New session; re-state the goal fresh rather than correcting in place</td></tr>
+        </table>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="group" id="memory" data-title="CLAUDE.md &amp; Project Memory">
+    <div class="section-head"><h2>CLAUDE.md &amp; Project Memory</h2><span class="section-sub mono">04 / durable instructions</span></div>
+    <div class="cards">
+
+      <div class="card">
+        <h3>Generate one</h3>
+        <p>Scans the repo and drafts a CLAUDE.md from what it finds — always review it, don't trust it blind.</p>
+        <pre><s>&gt;</s> <b>/init</b></pre>
+      </div>
+
+      <div class="card wide">
+        <h3>Where CLAUDE.md files live</h3>
+        <table>
+          <tr><th>Path</th><th>Scope</th></tr>
+          <tr><td>./CLAUDE.md</td><td>Project root — committed, shared with the team</td></tr>
+          <tr><td>./CLAUDE.local.md</td><td>Project root — personal, gitignored</td></tr>
+          <tr><td>~/.claude/CLAUDE.md</td><td>Your user-level defaults, every project</td></tr>
+          <tr><td>packages/api/CLAUDE.md</td><td>Loaded only when Claude is working inside that subfolder — great for monorepos</td></tr>
+        </table>
+      </div>
+
+      <div class="card">
+        <h3>What actually belongs in it</h3>
+        <p>Terse, imperative, project-specific. Not documentation.</p>
+        <pre>## Commands
+<i>bun run dev</i>      <s># start dev server</s>
+<i>bun test</i>          <s># run unit tests</s>
+<i>bun run lint --fix</i>
+
+## Conventions
+- Use <i>server actions</i>, not API routes, for mutations.
+- Tailwind only — no CSS modules.</pre>
+        <div class="note tip"><b>Tip</b>Treat it like onboarding notes for a new hire, not a README. If a human wouldn't need to be told, Claude doesn't either.</div>
+      </div>
+
+      <div class="card">
+        <h3>Import other files</h3>
+        <p>Keep CLAUDE.md short by pulling in detail on demand.</p>
+        <pre>See @docs/api-conventions.md for endpoint patterns.</pre>
+      </div>
+
+      <div class="card wide">
+        <h3>CLAUDE.md vs. auto-generated memory</h3>
+        <table>
+          <tr><th></th><th>CLAUDE.md</th><th>Auto/session memory</th></tr>
+          <tr><td>Who writes it</td><td>You, by hand</td><td>Claude, inferred from the conversation</td></tr>
+          <tr><td>Persistence</td><td>Always loaded, every session</td><td>Model-managed, can be edited/forgotten</td></tr>
+          <tr><td>Best for</td><td>Stable facts: commands, conventions, architecture</td><td>Things learned mid-task you haven't codified yet</td></tr>
+          <tr><td>Trust level</td><td>High — you control it</td><td>Verify before relying on it for anything critical</td></tr>
+        </table>
+        <div class="note gotcha"><b>Gotcha</b>Don't rely on auto memory to remember a hard constraint ("never touch the payments module") across sessions — write it into CLAUDE.md. Auto memory is a convenience layer, not a substitute for explicit instructions.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="group" id="workflow" data-title="Plan Mode &amp; Editing Workflow">
+    <div class="section-head"><h2>Plan Mode &amp; Editing Workflow</h2><span class="section-sub mono">05 / think before it writes</span></div>
+    <div class="cards">
+
+      <div class="card">
+        <h3>Enter plan mode</h3>
+        <p>Claude reads and reasons but makes no edits until you approve a plan.</p>
+        <pre><s>Shift+Tab</s> <s>(cycles through modes)</s>
+<s>&gt;</s> <b>/plan</b> <i>"add rate limiting to the login endpoint"</i></pre>
+      </div>
+
+      <div class="card">
+        <h3>Approve and execute</h3>
+        <p>Once the plan looks right, accept it — Claude then implements exactly that plan.</p>
+        <div class="note tip"><b>Tip</b>For anything touching auth, payments, migrations, or deletes — always route through plan mode first. The cost of reading a plan is a minute; the cost of an unreviewed multi-file edit going sideways is your afternoon.</div>
+      </div>
+
+      <div class="card wide">
+        <h3>Editing modes compared</h3>
+        <table>
+          <tr><th>Mode</th><th>Behavior</th></tr>
+          <tr><td>default</td><td>Prompts before every file edit and non-read-only command</td></tr>
+          <tr><td>plan</td><td>Read-only — proposes a plan, makes zero edits until approved</td></tr>
+          <tr><td>acceptEdits</td><td>Auto-approves file edits; still prompts for shell commands outside allow-list</td></tr>
+          <tr><td>bypassPermissions</td><td>No prompts at all, for anything — see danger note below</td></tr>
+        </table>
+      </div>
+
+      <div class="card">
+        <h3>Undo an edit / rewind</h3>
+        <p>Claude Code keeps checkpoints you can roll back to independent of git.</p>
+        <pre><s>Esc Esc</s> <s>(rewind to a previous checkpoint)</s></pre>
+        <div class="note gotcha"><b>Gotcha</b>Checkpoints cover files Claude touched in-session — they are not a replacement for git. Commit real checkpoints yourself; don't treat rewind as your only safety net for a long unstaged session.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="group" id="permissions" data-title="Permissions">
+    <div class="section-head"><h2>Permissions</h2><span class="section-sub mono">06 / what it's allowed to touch</span></div>
+    <div class="cards">
+
+      <div class="card">
+        <h3>Inspect current rules</h3>
+        <pre><s>&gt;</s> <b>/permissions</b></pre>
+      </div>
+
+      <div class="card">
+        <h3>Allow/deny syntax</h3>
+        <p>Tool-name plus an optional glob-matched argument pattern.</p>
+        <pre>{
+  <b>"permissions"</b>: {
+    <b>"allow"</b>: [<i>"Bash(npm run test:*)"</i>, <i>"Edit(src/**)"</i>],
+    <b>"deny"</b>:  [<i>"Bash(git push --force*)"</i>, <i>"Read(.env*)"</i>]
+  }
+}</pre>
+      </div>
+
+      <div class="card">
+        <h3>One-time vs persistent grants</h3>
+        <p>When prompted, you can allow just this call, or allow this pattern for the rest of the session/project.</p>
+        <div class="note tip"><b>Tip</b>"Allow for this project" writes the rule into <code>.claude/settings.local.json</code> automatically — check that file periodically, it accumulates grants you forgot you gave.</div>
+      </div>
+
+      <div class="card">
+        <h3>Restrict tools for one command</h3>
+        <p>Useful for a script that should only ever read, never write.</p>
+        <pre><b>claude</b> -p <i>"audit this repo for secrets"</i> --allowedTools <i>Read Grep</i></pre>
+      </div>
+
+      <div class="card danger">
+        <h3>--dangerously-skip-permissions</h3>
+        <p>Disables every permission check — every edit, every shell command, no prompts, no allow/deny list consulted.</p>
+        <pre><b>claude</b> --dangerously-skip-permissions</pre>
+        <div class="note danger"><b>Danger</b>This is the flag that lets Claude Code <code>rm -rf</code> or force-push without asking. Only ever pair it with a sandbox (Docker/native) that has no access to anything you'd mind losing — never run it directly against your real filesystem or a machine with prod credentials.</div>
+      </div>
+
+      <div class="card">
+        <h3>Enterprise-managed policy</h3>
+        <p>Org admins can pin rules that individual settings files cannot override.</p>
+        <pre><s># /Library/Application Support/ClaudeCode/managed-settings.json</s>
+{ <b>"permissions"</b>: { <b>"deny"</b>: [<i>"Bash(curl *)"</i>] } }</pre>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="group" id="sandbox" data-title="Sandboxing">
+    <div class="section-head"><h2>Sandboxing</h2><span class="section-sub mono">07 / containing the blast radius</span></div>
+    <div class="cards">
+
+      <div class="card wide">
+        <h3>Docker sandbox pattern</h3>
+        <p>Mount only the project, run bypass mode inside, throw the container away when done.</p>
+        <pre><b>docker</b> run -it --rm \
+  -v <i>$(pwd)</i>:/workspace -w /workspace \
+  <i>node:22-slim</i> bash -c <s>\</s>
+  <i>"npm i -g @anthropic-ai/claude-code && claude --dangerously-skip-permissions"</i></pre>
+        <div class="note tip"><b>Tip</b>This is the standard pairing for autonomous / unattended runs (Ralph-loop style): full permission bypass is fine because the container itself is the safety boundary, not the flag.</div>
+      </div>
+
+      <div class="card">
+        <h3>Native sandbox mode</h3>
+        <p>OS-level isolation (filesystem + network) without needing Docker at all.</p>
+        <pre>{ <b>"sandbox"</b>: { <b>"enabled"</b>: <i>true</i>, <b>"network"</b>: <i>"none"</i> } }</pre>
+        <div class="note gotcha"><b>Gotcha</b>Native sandboxing is OS-dependent (seatbelt on macOS, namespaces on Linux) — it isn't identical across platforms. Don't assume a config that isolates network access on one OS behaves the same on another; verify per-platform.</div>
+      </div>
+
+      <div class="card wide">
+        <h3>Docker vs. native sandbox — which one?</h3>
+        <table>
+          <tr><th></th><th>Docker</th><th>Native</th></tr>
+          <tr><td>Setup cost</td><td>Needs Docker installed &amp; running</td><td>None — built into Claude Code</td></tr>
+          <tr><td>Isolation strength</td><td>Full container boundary</td><td>OS-level, lighter-weight</td></tr>
+          <tr><td>Best for</td><td>Unattended/autonomous loops, CI</td><td>Quick "let it run without asking" on your own machine</td></tr>
+          <tr><td>Portability</td><td>Identical everywhere</td><td>Behavior varies by OS</td></tr>
+        </table>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="group" id="commands" data-title="Slash &amp; Custom Commands">
+    <div class="section-head"><h2>Slash &amp; Custom Commands</h2><span class="section-sub mono">08 / built-in and your own</span></div>
+    <div class="cards">
+
+      <div class="card wide">
+        <h3>Built-in commands worth knowing</h3>
+        <table>
+          <tr><th>Command</th><th>Does</th></tr>
+          <tr><td>/init</td><td>Generate a CLAUDE.md from the repo</td></tr>
+          <tr><td>/clear</td><td>Wipe context, fresh start</td></tr>
+          <tr><td>/compact</td><td>Summarize context, keep going</td></tr>
+          <tr><td>/model</td><td>Switch model mid-session</td></tr>
+          <tr><td>/permissions</td><td>View/edit tool permission rules</td></tr>
+          <tr><td>/agents</td><td>List/manage available subagents</td></tr>
+          <tr><td>/hooks</td><td>View configured hooks</td></tr>
+          <tr><td>/mcp</td><td>List connected MCP servers &amp; auth status</td></tr>
+          <tr><td>/review</td><td>Run a structured code review on current changes</td></tr>
+          <tr><td>/cost, /context</td><td>Spend and context-window introspection</td></tr>
+        </table>
+      </div>
+
+      <div class="card">
+        <h3>Custom command — the file</h3>
+        <p>Any markdown file in <code>.claude/commands/</code> becomes a slash command named after the file.</p>
+        <pre><s># .claude/commands/review.md</s>
+---
+<b>description</b>: <i>Review a PR diff for security issues</i>
+<b>allowed-tools</b>: [<i>Bash(git diff:*)</i>, <i>Grep</i>]
+---
+Review this diff for SQL injection, auth bypass,
+and secrets. Diff: !`git diff main`</pre>
+      </div>
+
+      <div class="card">
+        <h3>Invoke it</h3>
+        <pre><s>&gt;</s> <b>/review</b></pre>
+      </div>
+
+      <div class="card">
+        <h3>Arguments</h3>
+        <p><code>$ARGUMENTS</code> captures whatever follows the command name.</p>
+        <pre><s># .claude/commands/fix-issue.md</s>
+Find and fix issue #<b>$ARGUMENTS</b> from the tracker.</pre>
+        <pre><s>&gt;</s> <b>/fix-issue</b> <i>412</i></pre>
+      </div>
+
+      <div class="card">
+        <h3>Inline shell in a command</h3>
+        <p>A backtick-prefixed <code>!</code> line runs the shell command and splices its output into the prompt.</p>
+        <pre>Current branch: !`git branch --show-current`</pre>
+        <div class="note gotcha"><b>Gotcha</b>Inline shell execution in commands still respects your permission rules — if <code>Bash(git *)</code> isn't allow-listed, the command will stall on a prompt the first time it runs, even though you wrote the command yourself.</div>
+      </div>
+
+      <div class="card">
+        <h3>Personal vs project commands</h3>
+        <p><code>.claude/commands/</code> is per-project; <code>~/.claude/commands/</code> is available in every project you open.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="group" id="subagents" data-title="Subagents">
+    <div class="section-head"><h2>Subagents</h2><span class="section-sub mono">09 / parallel, isolated workers</span></div>
+    <div class="cards">
+
+      <div class="card">
+        <h3>Define one</h3>
+        <p>A markdown file with frontmatter in <code>.claude/agents/</code>.</p>
+        <pre><s># .claude/agents/docs-explorer.md</s>
+---
+<b>name</b>: <i>docs-explorer</i>
+<b>description</b>: <i>Looks up library docs and API references. Use proactively whenever unfamiliar library usage comes up.</i>
+<b>tools</b>: [<i>WebFetch</i>, <i>Grep</i>]
+---
+You research library documentation and report back
+concise, accurate usage examples. Never write code
+yourself — only report findings.</pre>
+      </div>
+
+      <div class="card">
+        <h3>Invoke explicitly</h3>
+        <pre><s>&gt;</s> <i>Use the docs-explorer agent to check BetterAuth's session config</i></pre>
+      </div>
+
+      <div class="card">
+        <h3>Automatic delegation</h3>
+        <p>The main agent decides on its own to delegate when a subagent's <code>description</code> matches the task.</p>
+        <div class="note tip"><b>Tip</b>Write the <code>description</code> field like a job posting, not a summary — it's the only thing the router reads to decide whether to hand off work. Vague descriptions get skipped in favor of the main agent just doing it inline.</div>
+      </div>
+
+      <div class="card">
+        <h3>List &amp; manage</h3>
+        <pre><s>&gt;</s> <b>/agents</b></pre>
+      </div>
+
+      <div class="card">
+        <h3>Isolated context — the whole point</h3>
+        <p>A subagent's conversation doesn't pollute the main session's context window.</p>
+        <div class="note gotcha"><b>Gotcha</b>Isolation cuts both ways: the subagent doesn't see what the main thread already tried, so it can re-discover (or re-break) something the main agent already fixed. Give subagents just enough context in the prompt to avoid redoing work.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="group" id="skills" data-title="Agent Skills">
+    <div class="section-head"><h2>Agent Skills</h2><span class="section-sub mono">10 / packaged, reusable expertise</span></div>
+    <div class="cards">
+
+      <div class="card">
+        <h3>Skill folder layout</h3>
+        <pre>.claude/skills/
+  react-components/
+    <b>SKILL.md</b>
+    examples/button.tsx</pre>
+      </div>
+
+      <div class="card">
+        <h3>SKILL.md frontmatter</h3>
+        <p>The <code>description</code> is what gets matched against the task — this is the entire trigger mechanism.</p>
+        <pre>---
+<b>name</b>: <i>react-components</i>
+<b>description</b>: <i>Best practices for building accessible React components with this project's design system. Use when creating or editing any .tsx component.</i>
+---
+## Conventions
+- Functional components only, no class components.
+- Import UI primitives from `@/components/ui`.</pre>
+      </div>
+
+      <div class="card">
+        <h3>Personal vs project skills</h3>
+        <p><code>~/.claude/skills/</code> loads in every project; <code>.claude/skills/</code> is project-scoped and can be committed for the team.</p>
+      </div>
+
+      <div class="card">
+        <h3>Use as a slash command</h3>
+        <p>A skill can also be invoked directly instead of waiting for auto-discovery.</p>
+        <pre><s>&gt;</s> <b>/react-components</b> <i>build a dropdown menu</i></pre>
+      </div>
+
+      <div class="card wide">
+        <h3>Skills vs. Subagents vs. Hooks — the confusion triangle</h3>
+        <table>
+          <tr><th></th><th>Skill</th><th>Subagent</th><th>Hook</th></tr>
+          <tr><td>What it is</td><td>Injected knowledge/best-practices</td><td>A separate agent with its own context</td><td>A shell command triggered by an event</td></tr>
+          <tr><td>Runs in</td><td>Main conversation, on-demand</td><td>Its own isolated conversation</td><td>Outside the model entirely</td></tr>
+          <tr><td>Good for</td><td>"How we do X here"</td><td>Parallel research/exploration</td><td>Deterministic side-effects (lint, format, notify)</td></tr>
+          <tr><td>Triggered by</td><td>Description match to the task</td><td>Explicit ask or auto-delegation</td><td>Tool-use lifecycle events</td></tr>
+        </table>
+        <div class="note gotcha"><b>Gotcha</b>If Claude keeps ignoring a skill you wrote, the problem is almost always the <code>description</code> line, not the content below it — that line is doing 90% of the triggering work, so write it like a search query someone would type, not a title.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="group" id="hooks" data-title="Hooks">
+    <div class="section-head"><h2>Hooks</h2><span class="section-sub mono">11 / deterministic side effects</span></div>
+    <div class="cards">
+
+      <div class="card wide">
+        <h3>Lifecycle events</h3>
+        <table>
+          <tr><th>Event</th><th>Fires</th></tr>
+          <tr><td>PreToolUse</td><td>Before a tool call — can block it</td></tr>
+          <tr><td>PostToolUse</td><td>After a tool call succeeds</td></tr>
+          <tr><td>UserPromptSubmit</td><td>When you submit a prompt, before the model sees it</td></tr>
+          <tr><td>Stop</td><td>When the agent finishes responding</td></tr>
+          <tr><td>SessionStart / SessionEnd</td><td>Session lifecycle boundaries</td></tr>
+        </table>
+      </div>
+
+      <div class="card">
+        <h3>Auto-format after every edit</h3>
+        <pre>{
+  <b>"hooks"</b>: {
+    <b>"PostToolUse"</b>: [{
+      <b>"matcher"</b>: <i>"Edit|Write"</i>,
+      <b>"hooks"</b>: [{ <b>"type"</b>: <i>"command"</i>,
+        <b>"command"</b>: <i>"npx prettier --write \"$CLAUDE_FILE_PATH\""</i> }]
+    }]
+  }
+}</pre>
+      </div>
+
+      <div class="card">
+        <h3>Block a dangerous command</h3>
+        <p>A <code>PreToolUse</code> hook that exits non-zero stops the tool call before it runs.</p>
+        <pre><s>#!/bin/bash</s>
+<s># .claude/hooks/block-force-push.sh</s>
+if [[ <i>"$CLAUDE_TOOL_INPUT"</i> == *<i>"push --force"</i>* ]]; then
+  echo <i>"blocked: force push"</i> &gt;&amp;2
+  exit <b>2</b>
+fi</pre>
+      </div>
+
+      <div class="card">
+        <h3>Exit code semantics</h3>
+        <table>
+          <tr><td>0</td><td>Allow, output ignored</td></tr>
+          <tr><td>2</td><td>Block the action, stderr shown to the model</td></tr>
+          <tr><td>other</td><td>Non-blocking error, logged</td></tr>
+        </table>
+        <div class="note gotcha"><b>Gotcha</b>People assume any non-zero exit blocks the tool call. Only exit code <code>2</code> does. A hook script that fails with <code>1</code> because of a typo will silently let the original action through — test hooks by deliberately triggering them, don't just trust the config.</div>
+      </div>
+
+      <div class="card">
+        <h3>Inspect configured hooks</h3>
+        <pre><s>&gt;</s> <b>/hooks</b></pre>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="group" id="mcp" data-title="MCP Servers">
+    <div class="section-head"><h2>MCP Servers</h2><span class="section-sub mono">12 / plugging in outside tools</span></div>
+    <div class="cards">
+
+      <div class="card">
+        <h3>Add a server</h3>
+        <pre><b>claude</b> mcp add <i>context7</i> \
+  --transport <i>http</i> https://mcp.context7.com/mcp</pre>
+      </div>
+
+      <div class="card">
+        <h3>Project-scoped config file</h3>
+        <p>Checked into the repo so the whole team gets the same servers.</p>
+        <pre><s># .mcp.json</s>
+{
+  <b>"mcpServers"</b>: {
+    <b>"context7"</b>: { <b>"type"</b>: <i>"http"</i>, <b>"url"</b>: <i>"https://mcp.context7.com/mcp"</i> },
+    <b>"github"</b>: { <b>"command"</b>: <i>"npx"</i>, <b>"args"</b>: [<i>"-y"</i>, <i>"@modelcontextprotocol/server-github"</i>] }
+  }
+}</pre>
+      </div>
+
+      <div class="card wide">
+        <h3>Scope levels</h3>
+        <table>
+          <tr><th>Scope</th><th>Stored in</th><th>Visible to</th></tr>
+          <tr><td>local</td><td>~/.claude.json (per-project entry)</td><td>Just you, just this project</td></tr>
+          <tr><td>project</td><td>.mcp.json (committed)</td><td>Whole team, this repo</td></tr>
+          <tr><td>user</td><td>~/.claude/settings.json</td><td>Just you, every project</td></tr>
+        </table>
+      </div>
+
+      <div class="card">
+        <h3>Check connection &amp; auth status</h3>
+        <pre><s>&gt;</s> <b>/mcp</b></pre>
+      </div>
+
+      <div class="card">
+        <h3>Grant tool access per server</h3>
+        <p>MCP tools go through the same permission system as built-in tools, namespaced by server.</p>
+        <pre>{ <b>"permissions"</b>: { <b>"allow"</b>: [<i>"mcp__github__create_issue"</i>] } }</pre>
+        <div class="note gotcha"><b>Gotcha</b>A committed <code>.mcp.json</code> with an OAuth server prompts every teammate to authenticate on their own machine the first time — that's expected, not a broken config. Don't put personal tokens in the committed file; use <code>.mcp.local.json</code> or env-var substitution for secrets.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="group" id="beyond" data-title="Beyond the Local CLI">
+    <div class="section-head"><h2>Beyond the Local CLI</h2><span class="section-sub mono">13 / desktop, web, remote, scheduled</span></div>
+    <div class="cards">
+
+      <div class="card">
+        <h3>Claude Code on the web</h3>
+        <p>Sessions run in the cloud against a connected GitHub repo — no local machine needed. Good for kicking off work from anywhere and reviewing via a PR.</p>
+      </div>
+
+      <div class="card">
+        <h3>Desktop app — multiple sessions</h3>
+        <p>Run several sessions in parallel, each on its own git worktree, with live diff and plan views per session.</p>
+      </div>
+
+      <div class="card">
+        <h3>Dispatch from mobile</h3>
+        <p>Pair the mobile app with a desktop machine; tasks sent from mobile land on that paired desktop.</p>
+        <div class="note gotcha"><b>Gotcha</b>Mobile dispatch needs an explicit path hint to know which project you mean — "fix the bug" with no path just stalls or picks the wrong repo if you have several open.</div>
+      </div>
+
+      <div class="card">
+        <h3>Scheduled tasks</h3>
+        <p>Recurring runs (daily summary, nightly test sweep) configured via desktop app or CLI, tied to a project and a permission mode.</p>
+        <pre><b>claude</b> schedule create \
+  --project <i>~/code/api-server</i> \
+  --cron <i>"0 8 * * *"</i> \
+  --prompt <i>"summarize yesterday's merged PRs into summary.md"</i></pre>
+      </div>
+
+      <div class="card">
+        <h3>Remote control from CLI</h3>
+        <p>Attaches a running session to a project so it can be continued and monitored from another device.</p>
+      </div>
+
+      <div class="card">
+        <h3>Chat-platform channels (e.g. Telegram)</h3>
+        <p>An official plugin lets you drive Claude Code from a chat app via a bot token — same permission model applies underneath.</p>
+      </div>
+
+      <div class="card">
+        <h3>It's not only for code</h3>
+        <p>The same agent loop drives spreadsheet, slide, and browser-automation tasks — "Code" is the product name, not a scope limit.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="group" id="recall" data-title="Last-Minute Recall">
+    <div class="section-head"><h2>Last-Minute Recall</h2><span class="section-sub mono">14 / five minutes before you need it</span></div>
+    <div class="cards">
+
+      <div class="card wide">
+        <h3>Reflexes</h3>
+        <ul style="margin:0; padding-left:20px; font-size:14px; line-height:1.7; color:var(--ink-2);">
+          <li>Stuck plan mode? <code>Shift+Tab</code> cycles modes.</li>
+          <li>Long task drifting? <code>/compact</code>, not <code>/clear</code>.</li>
+          <li>Switching feature entirely? <code>/clear</code>, not <code>/compact</code>.</li>
+          <li>About to touch auth/payments/migrations? Force plan mode first.</li>
+          <li>Bypass flag anywhere? Confirm you're inside a sandbox first.</li>
+          <li>Subagent not triggering? Rewrite its <code>description</code>, not its prompt body.</li>
+          <li>Hook silently not blocking? Check it exits with code <code>2</code> exactly.</li>
+          <li>Team not getting your MCP server? Check it's in <code>.mcp.json</code>, not local scope.</li>
+          <li>Committed the wrong settings file? <code>settings.local.json</code> is the one to gitignore.</li>
+          <li>Session forgot a hard rule? Put it in CLAUDE.md, not just the chat.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Syntax traps</h3>
+        <ul style="margin:0; padding-left:20px; font-size:14px; line-height:1.7; color:var(--ink-2);">
+          <li>Permission rules are glob patterns, not regex — <code>Bash(git *)</code> works, <code>Bash(git .*)</code> doesn't.</li>
+          <li><code>$ARGUMENTS</code> in commands is one blob, not positional args — split it yourself if you need <code>$1</code>/<code>$2</code> behavior.</li>
+          <li>Skill/subagent <code>description</code> fields are matched, everything else is just payload.</li>
+          <li>Inline <code>!`cmd`</code> shell in commands still needs permission allow-listing.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Limits &amp; costs worth knowing</h3>
+        <ul style="margin:0; padding-left:20px; font-size:14px; line-height:1.7; color:var(--ink-2);">
+          <li>Context window is finite per session — auto-compact fires on a token buffer, not a fixed message count.</li>
+          <li><code>/cost</code> reports the running spend for the current session only, not lifetime usage.</li>
+          <li>Scheduled/background tasks still consume the same usage quota as interactive sessions.</li>
+          <li>Native sandbox isolation guarantees differ by OS — verify, don't assume parity.</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  </main>
+</div>
+
+<footer>
+  <p>Claude Code Cheatsheet — for engineers who already know how to code, not how to click.</p>
+  <p>Verify flags and config keys against your installed version; CLI surface area changes fast.</p>
+</footer>
+
+<div class="no-match" id="no-match">No cards match that filter.</div>
+
+<script>
+(function(){
+  var input = document.getElementById('filter-input');
+  var count = document.getElementById('filter-count');
+  var noMatch = document.getElementById('no-match');
+  var sections = Array.prototype.slice.call(document.querySelectorAll('section.group'));
+  var allCards = Array.prototype.slice.call(document.querySelectorAll('.card'));
+  var totalCards = allCards.length;
+
+  // Build rail + chip nav from sections
+  var railLine = document.getElementById('rail-line');
+  var chipRail = document.getElementById('chip-rail');
+  sections.forEach(function(sec){
+    var title = sec.getAttribute('data-title');
+    var id = sec.id;
+    var a1 = document.createElement('a');
+    a1.href = '#' + id; a1.textContent = title;
+    railLine.appendChild(a1);
+    var a2 = document.createElement('a');
+    a2.href = '#' + id; a2.textContent = title;
+    chipRail.appendChild(a2);
+  });
+
+  function applyFilter(){
+    var q = input.value.trim().toLowerCase();
+    var visibleCount = 0;
+
+    allCards.forEach(function(card){
+      var text = card.textContent.toLowerCase();
+      var match = q === '' || text.indexOf(q) !== -1;
+      card.classList.toggle('hidden', !match);
+      if (match) visibleCount++;
+    });
+
+    sections.forEach(function(sec){
+      var visibleInSection = sec.querySelectorAll('.card:not(.hidden)').length;
+      sec.classList.toggle('is-empty', visibleInSection === 0);
+    });
+
+    count.textContent = visibleCount + ' of ' + totalCards + ' cards';
+    noMatch.classList.toggle('show', visibleCount === 0);
+  }
+
+  input.addEventListener('input', applyFilter);
+
+  document.addEventListener('keydown', function(e){
+    if (e.key === '/' && document.activeElement !== input) {
+      e.preventDefault();
+      input.focus();
+    } else if (e.key === 'Escape' && document.activeElement === input) {
+      input.value = '';
+      applyFilter();
+      input.blur();
+    }
+  });
+
+  applyFilter();
+})();
+</script>
+
+</body>
+</html>
