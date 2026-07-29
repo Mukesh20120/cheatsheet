@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cheatsheets</title>
+<meta name="description" content="Single-page recall sheets for things worth remembering.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#E7E9E1;
+  --card:#FBFBF7;
+  --ink:#171B17;
+  --ink-2:#5C6359;
+  --rule:#CBCFC1;
+  --volt:#4B31C8;
+  --volt-soft:#EAE6FA;
+  --code-bg:#141914;
+  --code-fg:#DFE5D8;
+  --code-com:#7C8878;
+  --display:'Archivo','Helvetica Neue',Arial,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:24px}
+body{
+  margin:0;
+  background:var(--paper);
+  background-image:linear-gradient(var(--rule) 1px,transparent 1px),linear-gradient(90deg,var(--rule) 1px,transparent 1px);
+  background-size:56px 56px;
+  color:var(--ink);
+  font-family:var(--display);
+  font-size:15px;line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px 96px}
+
+/* ---------- masthead ---------- */
+.mast{padding:72px 0 26px;border-bottom:2px solid var(--ink)}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-2)}
+.mast h1{
+  font-size:clamp(44px,10vw,104px);font-weight:800;line-height:.9;
+  letter-spacing:-.04em;margin:12px 0 0;text-transform:uppercase;
+}
+.mast h1 em{font-style:normal;color:var(--volt)}
+.mast p{max-width:56ch;color:var(--ink-2);margin:18px 0 0;font-size:16px}
+
+/* ---------- filter ---------- */
+.bar{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin:26px 0 0}
+.bar input{
+  flex:1 1 240px;min-width:0;font-family:var(--mono);font-size:14px;
+  padding:11px 14px;border:1.5px solid var(--ink);background:var(--card);color:var(--ink);
+}
+.bar input:focus{outline:3px solid var(--volt);outline-offset:1px}
+.bar input::placeholder{color:var(--ink-2)}
+.count{font-family:var(--mono);font-size:12px;color:var(--ink-2);white-space:nowrap}
+
+/* ---------- the shelf ---------- */
+.shelf{margin:8px 0 0;border-top:1px solid var(--rule)}
+.sheet{
+  display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:0 20px;
+  align-items:baseline;padding:24px 16px 24px 0;
+  border-bottom:1px solid var(--rule);
+  text-decoration:none;color:inherit;position:relative;
+  transition:background .12s ease,padding-left .12s ease;
+}
+.sheet::before{
+  content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:transparent;
+  transition:background .12s ease;
+}
+.sheet:hover,.sheet:focus-visible{background:var(--card);padding-left:16px;outline:none}
+.sheet:hover::before,.sheet:focus-visible::before{background:var(--volt)}
+.sheet:focus-visible{box-shadow:inset 0 0 0 2px var(--volt)}
+
+.idx{font-family:var(--mono);font-size:12px;color:var(--ink-2);padding-top:4px}
+.sheet:hover .idx{color:var(--volt)}
+.meat h2{margin:0;font-size:clamp(22px,3.4vw,32px);font-weight:700;letter-spacing:-.025em;line-height:1.08}
+.meat p{margin:8px 0 0;font-size:14px;color:var(--ink-2);max-width:62ch}
+.tags{margin:12px 0 0;display:flex;gap:6px;flex-wrap:wrap}
+.tags span{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+  border:1px solid var(--rule);padding:3px 7px;color:var(--ink-2);background:var(--card);
+}
+.side{text-align:right;font-family:var(--mono);font-size:11px;color:var(--ink-2);white-space:nowrap;padding-top:6px}
+.side .arrow{display:block;font-size:20px;margin-top:8px;color:var(--rule);line-height:1}
+.sheet:hover .side .arrow{color:var(--volt)}
+
+.soon{opacity:.45;pointer-events:none}
+.soon .side{color:var(--ink-2)}
+
+.empty{display:none;font-family:var(--mono);font-size:14px;color:var(--ink-2);padding:44px 0}
+body.no-results .empty{display:block}
+body.no-results .shelf{border-bottom:1px solid var(--rule)}
+
+/* ---------- how to add ---------- */
+.howto{margin-top:64px;border-top:2px solid var(--ink);padding-top:26px}
+.howto h3{margin:0 0 6px;font-size:13px;letter-spacing:.18em;text-transform:uppercase;font-family:var(--mono)}
+.howto > p{color:var(--ink-2);margin:0 0 22px;max-width:60ch;font-size:14px}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+.step{background:var(--card);border:1px solid var(--rule);padding:16px 18px}
+.step b{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--volt);display:block;margin-bottom:8px;
+}
+.step p{margin:0;font-size:13.5px;color:var(--ink-2)}
+pre{
+  margin:12px 0 0;background:var(--code-bg);color:var(--code-fg);
+  font-family:var(--mono);font-size:12px;line-height:1.6;padding:12px 14px;overflow-x:auto;
+}
+pre s{color:var(--code-com);text-decoration:none}
+code{font-family:var(--mono);font-size:.92em;background:var(--volt-soft);color:var(--volt);padding:1px 5px}
+
+footer{margin-top:56px;padding-top:16px;border-top:1px solid var(--rule);font-family:var(--mono);font-size:11.5px;color:var(--ink-2)}
+
+@media (max-width:640px){
+  .sheet{grid-template-columns:auto minmax(0,1fr);gap:0 14px}
+  .side{grid-column:2;text-align:left;padding-top:12px}
+  .side .arrow{display:none}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.sheet{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="mast">
+    <div class="eyebrow">Reference shelf</div>
+    <h1>Cheat<em>sheets</em></h1>
+    <p>Single-page recall sheets. Each one is self-contained — open it, filter it, print it. No dependencies, no build step.</p>
+  </header>
+
+  <div class="bar">
+    <input id="q" type="search" placeholder="Filter sheets — try: ci, docker, sql…" autocomplete="off" aria-label="Filter cheatsheets">
+    <span class="count" id="count"></span>
+  </div>
+
+  <!-- ==================================================================
+       THE SHELF
+       To add a cheatsheet: drop the .html file in /sheets, then copy the
+       template block at the bottom of this list and fill it in.
+       ================================================================== -->
+  <div class="shelf" id="shelf">
+
+    <a class="sheet" href="sheets/github-actions.html">
+      <span class="idx">01</span>
+      <span class="meat">
+        <h2>GitHub Actions</h2>
+        <p>Workflows, jobs, steps, events, artifacts, caching, secrets, matrix builds, reusable workflows, custom actions and the permissions model.</p>
+        <span class="tags"><span>CI/CD</span><span>YAML</span><span>DevOps</span></span>
+      </span>
+      <span class="side">~70 cards<span class="arrow">&rarr;</span></span>
+    </a>
+
+    <!-- ==============================================================
+         TEMPLATE — copy this block, uncomment it, fill it in.
+         Bump the number in .idx so the shelf stays in order.
+
+    <a class="sheet" href="sheets/FILE-NAME.html">
+      <span class="idx">02</span>
+      <span class="meat">
+        <h2>SHEET TITLE</h2>
+        <p>One or two sentences listing the topics inside. The filter box
+           searches this text, so name the keywords you'd actually type.</p>
+        <span class="tags"><span>TAG</span><span>TAG</span></span>
+      </span>
+      <span class="side">~40 cards<span class="arrow">&rarr;</span></span>
+    </a>
+
+         Not written yet? Add class="soon" and drop the href:
+         <span class="sheet soon"> … <span class="side">Planned</span></span>
+         ============================================================== -->
+
+  </div>
+
+  <p class="empty">Nothing matches. Clear the filter to see everything.</p>
+
+  <section class="howto">
+    <h3>Adding a sheet</h3>
+    <p>Two moves, no tooling. The site is plain static files — whatever you drop in is what gets served.</p>
+    <div class="steps">
+
+      <div class="step">
+        <b>Step 1 · the file</b>
+        <p>Put a self-contained <code>.html</code> file in the <code>sheets/</code> folder. Lowercase, hyphenated name.</p>
+<pre>sheets/
+  github-actions.html
+  <s>docker.html        ← your new one</s></pre>
+      </div>
+
+      <div class="step">
+        <b>Step 2 · the link</b>
+        <p>Open <code>index.html</code>, find the <code>TEMPLATE</code> comment inside the shelf, copy that block above it and fill in the four fields.</p>
+<pre>href   <s>→ sheets/docker.html</s>
+idx    <s>→ 02</s>
+h2     <s>→ Docker</s>
+p      <s>→ topics, for the filter</s></pre>
+      </div>
+
+      <div class="step">
+        <b>Step 3 · ship</b>
+        <p>Commit and push. GitHub Pages redeploys on its own.</p>
+<pre>git add .
+git commit -m "add docker sheet"
+git push</pre>
+      </div>
+
+    </div>
+  </section>
+
+  <footer>Static site · no build step · <span id="year"></span></footer>
+</div>
+
+<script>
+(function(){
+  var q = document.getElementById('q');
+  var count = document.getElementById('count');
+  var sheets = Array.prototype.slice.call(document.querySelectorAll('.sheet'));
+  var total = sheets.length;
+
+  sheets.forEach(function(s){ s.dataset.text = s.textContent.toLowerCase(); });
+
+  function render(term){
+    var shown = 0;
+    sheets.forEach(function(s){
+      var hit = !term || s.dataset.text.indexOf(term) !== -1;
+      s.style.display = hit ? '' : 'none';
+      if(hit) shown++;
+    });
+    document.body.classList.toggle('no-results', shown === 0);
+    count.textContent = term ? shown + ' of ' + total : total + (total === 1 ? ' sheet' : ' sheets');
+  }
+
+  q.addEventListener('input', function(){ render(q.value.trim().toLowerCase()); });
+  q.addEventListener('keydown', function(e){ if(e.key === 'Escape'){ q.value=''; render(''); } });
+  document.addEventListener('keydown', function(e){
+    if(e.key === '/' && document.activeElement !== q){ e.preventDefault(); q.focus(); }
+  });
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+  render('');
+})();
+</script>
+</body>
+</html>
